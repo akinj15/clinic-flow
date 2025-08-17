@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import AccessDenied from "@/components/ui/AccessDenied";
 import { authClient } from "@/lib/auth-client";
-import { Prisma, Setor, TipoAbordagem, Unidade } from "../../../../generated/prisma";
+import { Prisma, Setor, TipoAbordagem, Unidade } from "@generated/prisma";
 
 
 interface Itens {

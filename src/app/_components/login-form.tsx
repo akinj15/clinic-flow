@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 // import { GoogleLogoIcon } from "@phosphor-icons/react";
 import { authClient } from "@/lib/auth-client";
-import { Prisma } from "../../../generated/prisma";
+import { Prisma } from "@generated/prisma";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Email inválido" }),

@@ -26,7 +26,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
-import { Prisma } from "../../../../generated/prisma";
+import { Prisma } from "@generated/prisma";
 
 interface Props {
   medico: Prisma.MedicoCreateInput;

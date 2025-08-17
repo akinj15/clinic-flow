@@ -32,7 +32,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Prisma } from "../../../generated/prisma";
+import { Prisma } from "@generated/prisma";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 

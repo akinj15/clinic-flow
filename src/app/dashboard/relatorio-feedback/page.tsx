@@ -23,7 +23,7 @@ import { FileBarChart, Download, Filter } from "lucide-react";
 import { format, parseISO, isAfter, isBefore } from "date-fns";
 import AccessDenied from "@/components/ui/AccessDenied";
 import { authClient } from "@/lib/auth-client";
-import { Feedback, Medico, Prisma } from "../../../../generated/prisma";
+import { Feedback, Medico, Prisma } from "@generated/prisma";
 
 type FeedbackWithMedico = Feedback & { medico: Medico | null };
 

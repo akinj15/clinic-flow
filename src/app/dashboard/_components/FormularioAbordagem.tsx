@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { User, CheckCircle, FileText } from "lucide-react";
-import { Prisma, Setor, TipoAbordagem, Unidade } from "../../../../generated/prisma";
+import { Prisma, Setor, TipoAbordagem, Unidade } from "@generated/prisma";
 
 // 🔹 Estados fixos
 const todosEstados = [

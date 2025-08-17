@@ -4,7 +4,7 @@ import GerenciadorItem from "./_components/GerenciadorItem";
 import { Building } from "lucide-react";
 import AccessDenied from "@/components/ui/AccessDenied";
 import { authClient } from "@/lib/auth-client" // import the auth client
-import { Prisma } from "../../../../generated/prisma";
+import { Prisma } from "@generated/prisma";
 
 export default function GerenciarUnidades() {
   const { data: session, isPending: loadingUser } = authClient.useSession();

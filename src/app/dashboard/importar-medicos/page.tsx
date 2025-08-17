@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import Papa, { ParseResult } from "papaparse";
 import AccessDenied from "@/components/ui/AccessDenied";
 import { authClient } from "@/lib/auth-client";
-import { Prisma } from "../../../../generated/prisma";
+import { Prisma } from "@generated/prisma";
 
 // 👉 Tipo para um médico importado
 interface Medico {

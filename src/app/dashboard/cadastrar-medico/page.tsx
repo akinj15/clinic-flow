@@ -9,8 +9,8 @@ import { UserPlus, X, Plus, Check } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import AccessDenied from "@/components/ui/AccessDenied";
 import { useSearchParams } from "next/navigation";
-import { authClient } from "@/lib/auth-client" // import the auth client
-import { Prisma } from "../../../../generated/prisma";
+import { authClient } from "@/lib/auth-client"; // import the auth client
+import { Prisma } from "@generated/prisma";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -30,7 +30,7 @@ const SETORES_DISPONIVEIS = [
   "Laboratório",
 ];
 
-export const medicoSchema = z.object({
+const medicoSchema = z.object({
   id: z.string(),
   cpf: z.string().min(11, "CPF é obrigatório"),
   crm: z.string().optional(),
@@ -41,7 +41,7 @@ export const medicoSchema = z.object({
   setor: z.array(z.string()).min(1, "Selecione pelo menos um setor"),
 });
 
-export type MedicoFormData = z.infer<typeof medicoSchema>;
+type MedicoFormData = z.infer<typeof medicoSchema>;
 
 export default function CadastrarMedico() {
   const { data: session, isPending: loadingUser } = authClient.useSession();
@@ -97,10 +97,9 @@ export default function CadastrarMedico() {
   useEffect(() => {
     const cpfFromUrl = searchParams.get("cpf") || "";
     if (cpfFromUrl) {
-      setValue("cpf", cpfFromUrl)
+      setValue("cpf", cpfFromUrl);
       fetchMedico(cpfFromUrl);
-    };
-    
+    }
 
     if (!loadingUser) setUser(session?.user || undefined);
   }, [searchParams, loadingUser, session?.user, setValue]);
@@ -279,9 +278,7 @@ export default function CadastrarMedico() {
                   ))}
                 </div>
                 {errors.setor && (
-                  <p className="text-red-500 text-sm">
-                    {errors.setor.message}
-                  </p>
+                  <p className="text-red-500 text-sm">{errors.setor.message}</p>
                 )}
                 {setoresSelecionados.length > 0 && (
                   <div className="bg-blue-50 p-4 rounded-lg">
