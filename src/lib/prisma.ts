@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import { withAccelerate } from "@prisma/extension-accelerate";
+import { PrismaClient } from '@prisma/client'
+import { withAccelerate } from '@prisma/extension-accelerate'
 
-const prisma = new PrismaClient().$extends(withAccelerate());
+export const prisma = new PrismaClient().$extends(withAccelerate())
 
 export const consultaMedico = async (cpf: string) => {
   try {
@@ -13,4 +13,4 @@ export const consultaMedico = async (cpf: string) => {
     console.error("Erro ao consultar médico:", error);
     throw new Error("Erro ao consultar médico");
   }
-};
+}
