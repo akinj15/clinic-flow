@@ -106,7 +106,7 @@ export default function ImportarMedicos() {
           especialidade: String(item.especialidade || "").trim(),
           setor: item.setor
             ? item.setor
-                .split(";")
+                .split(",")
                 .map((s) => s.trim())
                 .filter(Boolean)
             : [],
@@ -177,7 +177,7 @@ export default function ImportarMedicos() {
   };
 
   const downloadTemplate = () => {
-    const csvContent = `cpf,crm,nomeCompleto,email,telefone,especialidade,setor\n11122233344,12345/SP,Dr. Exemplo da Silva,exemplo@email.com,(11) 98877-6655,Cardiologia,"UTI;Emergência"`;
+    const csvContent = `cpf;crm;nomeCompleto;email;telefone;especialidade;setor\n11122233344;12345/SP;Dr. Exemplo da Silva;exemplo@email.com;(11) 98877-6655;Cardiologia;"UTI,Emergência"`;
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
