@@ -47,16 +47,16 @@ const allNavigationItems = [
     roles: ["admin"], // Apenas administradores
   },
   {
-    title: "Gerenciar Opções",
-    url: "/dashboard/gerencia-opcoes",
-    icon: SlidersHorizontal,
-    roles: ["admin"], // Apenas administradores
-  },
-  {
     title: "Gerenciar Unidades",
     url: "/dashboard/cadastrar-unidade",
     icon: Building,
     roles: ["admin"],
+  },
+  {
+    title: "Gerenciar Opções",
+    url: "/dashboard/gerencia-opcoes",
+    icon: SlidersHorizontal,
+    roles: ["admin"], // Apenas administradores
   },
   {
     title: "Importar Médicos ",
