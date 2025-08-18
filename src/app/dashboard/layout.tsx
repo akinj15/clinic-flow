@@ -47,12 +47,6 @@ const allNavigationItems = [
     roles: ["admin"], // Apenas administradores
   },
   {
-    title: "Importar Médicos ",
-    url: "/dashboard/importar-medicos",
-    icon: Upload,
-    roles: ["admin"], // Apenas administradores
-  },
-  {
     title: "Gerenciar Opções",
     url: "/dashboard/gerencia-opcoes",
     icon: SlidersHorizontal,
@@ -63,6 +57,12 @@ const allNavigationItems = [
     url: "/dashboard/cadastrar-unidade",
     icon: Building,
     roles: ["admin"],
+  },
+  {
+    title: "Importar Médicos ",
+    url: "/dashboard/importar-medicos",
+    icon: Upload,
+    roles: ["admin"], // Apenas administradores
   },
   {
     title: "Relatório de Feedbacks",

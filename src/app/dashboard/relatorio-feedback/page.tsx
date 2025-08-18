@@ -137,8 +137,8 @@ export default function RelatorioFeedbacks() {
       removerAcentos(f.detalhes || ""),
     ]);
     const csvContent = [
-      headers.join(","),
-      ...csvData.map((row) => row.map((field) => `"${field}"`).join(",")),
+      headers.join(";"),
+      ...csvData.map((row) => row.map((field) => `"${field}"`).join(";")),
     ].join("\n");
     const blob = new Blob([`\uFEFF${csvContent}`], {
       type: "text/csv;charset=utf-8;",
