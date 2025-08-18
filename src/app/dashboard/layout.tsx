@@ -47,7 +47,7 @@ const allNavigationItems = [
     roles: ["admin"], // Apenas administradores
   },
   {
-    title: "Importar Médicos",
+    title: "Importar Médicos ",
     url: "/dashboard/importar-medicos",
     icon: Upload,
     roles: ["admin"], // Apenas administradores
