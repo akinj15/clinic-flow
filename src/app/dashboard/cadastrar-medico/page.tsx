@@ -249,7 +249,7 @@ export default function CadastrarMedico() {
               </div>
 
               {/* Setores */}
-              <div>
+              {/* <div>
                 <Label className="mb-4 block">Setores de Atuação *</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
                   {SETORES_DISPONIVEIS.map((setor) => (
@@ -301,7 +301,7 @@ export default function CadastrarMedico() {
                     </div>
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {success && (
                 <Alert className="border-green-200 bg-green-50">
