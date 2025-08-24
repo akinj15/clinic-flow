@@ -13,8 +13,6 @@ export async function DELETE(req: Request, { params }: Params) {
     if (!param.id) {
       return NextResponse.json({ error: "ID inválido" }, { status: 400 });
     }
-    console.log("Deleting unidade with ID:", param.id);
-
 
     await prisma.unidade.delete({
       where: { id: param.id },

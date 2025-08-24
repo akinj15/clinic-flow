@@ -23,7 +23,6 @@ export default function GerenciarUnidades() {
       </div>
     );
   }
-  console.log("Current user:", user);
   if (!user || user.role !== "admin") {
     return <AccessDenied />;
   }

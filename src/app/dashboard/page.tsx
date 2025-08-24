@@ -78,7 +78,6 @@ export default function BuscarMedico() {
     try {
       const res = await fetch(`/api/medico/${cpf.replace(/\D/g, "")}`);
       const data = await res.json();
-      console.log("Dados do médico:", data);
       if (!data || data.error) {
         setError("Médico não encontrado");
         setShowCadastroModal(true);

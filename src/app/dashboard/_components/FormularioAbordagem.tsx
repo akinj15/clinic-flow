@@ -66,11 +66,10 @@ const schema = z
     tipoAbordagem: z.string().min(1, "Tipo de abordagem é obrigatório"),
     detalhes: z.string().optional(),
   })
-  .refine(
-    (data) =>
-      data.tipoAbordagem !== "OUTRO MOTIVO" || !!data.detalhes,
-    { message: "Por favor, descreva o motivo", path: ["detalhes"] }
-  );
+  .refine((data) => data.tipoAbordagem !== "OUTRO MOTIVO" || !!data.detalhes, {
+    message: "Por favor, descreva o motivo",
+    path: ["detalhes"],
+  });
 
 type FormData = z.infer<typeof schema>;
 
@@ -313,24 +312,19 @@ export default function FormularioAbordagem({
                   </p>
                 )}
               </div>
-
-              {/* 🔹 Outro Motivo */}
-              {tipoAbordagem === "OUTRO MOTIVO" && (
-                <div>
-                  <Label>Descreva o motivo</Label>
-                  <Textarea
-                    {...register("detalhes")}
-                    placeholder="Detalhe aqui o motivo da abordagem..."
-                    className="mt-2 border-blue-200 min-h-[88px]"
-                  />
-                  {errors.detalhes && (
-                    <p className="text-red-600 text-sm">
-                      {errors.detalhes.message}
-                    </p>
-                  )}
-                </div>
-              )}
-
+              <div>
+                <Label>Descreva</Label>
+                <Textarea
+                  {...register("detalhes")}
+                  placeholder="Detalhe aqui a abordagem..."
+                  className="mt-2 border-blue-200 min-h-[88px]"
+                />
+                {errors.detalhes && (
+                  <p className="text-red-600 text-sm">
+                    {errors.detalhes.message}
+                  </p>
+                )}
+              </div>
               {/* 🔹 Feedback */}
               {success && (
                 <Alert className="border-green-200 bg-green-50">

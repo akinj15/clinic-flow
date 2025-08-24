@@ -71,7 +71,7 @@ export async function PUT(req: Request, { params }: Params) {
 export async function DELETE(req: Request, { params }: Params) {
   try {
     const param = await params; 
-    console.log("Deletando médico com CPF:", param.cpf);
+
     await prisma.medico.delete({
       where: { cpf: formatCpf(param.cpf) },
     });

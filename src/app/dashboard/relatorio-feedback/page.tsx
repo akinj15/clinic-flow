@@ -23,7 +23,7 @@ import { FileBarChart, Download, Filter } from "lucide-react";
 import { format, parseISO, isAfter, isBefore } from "date-fns";
 import AccessDenied from "@/components/ui/AccessDenied";
 import { authClient } from "@/lib/auth-client";
-import { Feedback, Medico, Prisma } from "@generated/prisma";
+import { Feedback, Medico, Prisma, Setor, TipoAbordagem, Unidade } from "@generated/prisma";
 
 type FeedbackWithMedico = Feedback & { medico: Medico | null };
 
@@ -31,6 +31,9 @@ export default function RelatorioFeedbacks() {
   const [feedbacks, setFeedbacks] = useState<FeedbackWithMedico[]>([]);
   const [medicos, setMedicos] = useState<Medico[]>([]);
   const [loading, setLoading] = useState(true);
+  const [unidades, setUnidades] = useState<Unidade[]>([]);
+  const [setores, setSetores] = useState<Setor[]>([]);
+  const [abordagem, setAbordagem] = useState<TipoAbordagem[]>([]);
   const [filtros, setFiltros] = useState({
     dataInicio: "",
     dataFim: "",
@@ -43,67 +46,73 @@ export default function RelatorioFeedbacks() {
   );
   const { data: session, isPending: loadingUser } = authClient.useSession();
 
+  const carregarUnidades = async () => {
+    const res = await fetch("/api/unidade", { cache: "no-store" });
+    if (!res.ok) throw new Error("Erro ao listar unidades");
+    const data: Unidade[] = await res.json();
+    setUnidades(data);
+  };
+
+  const carregarAbordagem = async () => {
+    const res = await fetch("/api/tipo-abordagem", { cache: "no-store" });
+    if (!res.ok) throw new Error("Erro ao listar abordagem");
+    const data: TipoAbordagem[] = await res.json();
+    setAbordagem(data);
+  };
+  
+
+  const carregarSetores = async () => {
+    const res = await fetch("/api/setor", { cache: "no-store" });
+    if (!res.ok) throw new Error("Erro ao listar setores");
+    const data: Setor[] = await res.json();
+    setSetores(data);
+  };
+  
+  const carregarMedicos = async () => {
+    let res = await fetch("/api/medico", { cache: "no-store" });
+    if (!res.ok) throw new Error("Erro ao listar medicos");
+    const dataMed: Medico[] = await res.json();
+    setMedicos(dataMed);
+  };
+
+  const consultarFeedbacks = async () => {
+    setLoading(true);
+    try {
+      const query = new URLSearchParams(filtros).toString();
+      const res = await fetch(`/api/feedback?${query}`, {
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error("Erro ao listar feedbacks");
+      setFeedbacks(await res.json());
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!loadingUser) setUser(session?.user || ({} as Prisma.UserCreateInput));
-    console.log(session);
     if (!loadingUser && !session?.user) {
       setLoading(false);
       return;
     }
-
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        let res = await fetch("/api/medico", { cache: "no-store" });
-        if (!res.ok) throw new Error("Erro ao listar medicos");
-        const dataMed: Medico[] = await res.json();
-        setMedicos(dataMed);
-
-        res = await fetch("/api/feedback", { cache: "no-store" });
-        if (!res.ok) throw new Error("Erro ao listar medicos");
-        const dataFeed: FeedbackWithMedico[] = await res.json();
-        setFeedbacks(dataFeed);
-      } catch (error) {
-        console.error("Erro ao carregar dados:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadData();
+    carregarUnidades();
+    carregarAbordagem();
+    carregarSetores();
+    carregarMedicos();
+    setLoading(false);
   }, [loadingUser]);
 
   const handleFiltroChange = (campo: string, valor: string) =>
     setFiltros((prev) => ({ ...prev, [campo]: valor }));
 
-  const feedbacksFiltrados = feedbacks.filter((feedback) => {
-    if (!feedback.medico) return false;
-    const dataFeedback = parseISO(feedback.createdAt.toString());
-    if (
-      filtros.dataInicio &&
-      isBefore(dataFeedback, parseISO(filtros.dataInicio))
-    )
-      return false;
-    if (
-      filtros.dataFim &&
-      isAfter(dataFeedback, parseISO(filtros.dataFim + "T23:59:59"))
-    )
-      return false;
-    if (filtros.medicoId && feedback.medicoId !== filtros.medicoId)
-      return false;
-    if (filtros.setor && feedback.setor !== filtros.setor) return false;
-    if (
-      filtros.tipoAbordagem &&
-      feedback.tipoAbordagem !== filtros.tipoAbordagem
-    )
-      return false;
-    return true;
-  });
-
+  
   const removerAcentos = (str: string | undefined) =>
     str
-      ? str
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
+  ? str
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
           .replace(/[çÇ]/g, (c: string) => (c === "ç" ? "c" : "C"))
       : "";
 
@@ -122,7 +131,7 @@ export default function RelatorioFeedbacks() {
       "Tipo de Abordagem",
       "Detalhes",
     ];
-    const csvData = feedbacksFiltrados.map((f) => [
+    const csvData = feedbacks.map((f) => [
       format(parseISO(f.createdAt.toString()), "dd/MM/yyyy HH:mm"),
       removerAcentos(f.medico?.cpf),
       removerAcentos(f.medico?.crm),
@@ -152,12 +161,6 @@ export default function RelatorioFeedbacks() {
     link.click();
   };
 
-  const setoresUnicos = [
-    ...new Set(feedbacks.map((f) => f.setor).filter(Boolean)),
-  ];
-  const tiposAbordagemUnicos = [
-    ...new Set(feedbacks.map((f) => f.tipoAbordagem).filter(Boolean)),
-  ];
 
   if (loadingUser || loading)
     return (
@@ -241,9 +244,9 @@ export default function RelatorioFeedbacks() {
                   </SelectTrigger>
                   <SelectContent>
                     {/* <SelectItem value={"TODOS"}>Todos</SelectItem> */}
-                    {setoresUnicos.map((s) => (
-                      <SelectItem key={s} value={s}>
-                        {s}
+                    {setores.map((s) => (
+                      <SelectItem key={s.id} value={s.nome}>
+                        {s.nome}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -262,9 +265,9 @@ export default function RelatorioFeedbacks() {
                   </SelectTrigger>
                   <SelectContent>
                     {/* <SelectItem value={""}>Todos</SelectItem> */}
-                    {tiposAbordagemUnicos.map((t) => (
-                      <SelectItem key={t} value={t}>
-                        {t}
+                    {abordagem.map((t) => (
+                      <SelectItem key={t.id} value={t.nome}>
+                        {t.nome}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -273,13 +276,19 @@ export default function RelatorioFeedbacks() {
             </div>
             <div className="flex justify-between items-center mt-4">
               <p className="text-sm text-gray-600">
-                Mostrando {feedbacksFiltrados.length} de {feedbacks.length}{" "}
+                Mostrando {feedbacks.length} de {feedbacks.length}{" "}
                 feedbacks
               </p>
-              <Button onClick={exportarCSV} variant="outline">
-                <Download className="w-4 h-4 mr-2" />
-                Exportar CSV
-              </Button>
+              <div className="flex justify-end gap-3">
+                <Button
+                  onClick={exportarCSV}
+                  variant="outline"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Exportar CSV
+                </Button>
+                <Button onClick={consultarFeedbacks}>Consultar</Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -300,7 +309,7 @@ export default function RelatorioFeedbacks() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {feedbacksFiltrados.map((f) => (
+                  {feedbacks.map((f) => (
                     <TableRow key={f.id} className="hover:bg-blue-50/50">
                       <TableCell>
                         {format(

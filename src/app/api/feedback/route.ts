@@ -2,10 +2,35 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 // 🔹 Listar todos os médicos
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const feedback = await prisma.feedback.findMany({ include: { medico: true } });
-    return NextResponse.json(feedback);
+    const { searchParams } = new URL(req.url);
+
+    const dataInicio = searchParams.get("dataInicio");
+    const dataFim = searchParams.get("dataFim");
+    const medicoId = searchParams.get("medicoId");
+    const setor = searchParams.get("setor");
+    const tipoAbordagem = searchParams.get("tipoAbordagem");
+
+    const feedbacks = await prisma.feedback.findMany({
+      where: {
+        ...(medicoId ? { medicoId } : {}),
+        ...(setor ? { setor } : {}),
+        ...(tipoAbordagem ? { tipoAbordagem } : {}),
+        ...(dataInicio || dataFim
+          ? {
+              createdAt: {
+                ...(dataInicio ? { gte: new Date(dataInicio) } : {}),
+                ...(dataFim ? { lte: new Date(`${dataFim}T23:59:59`) } : {}),
+              },
+            }
+          : {}),
+      },
+      include: { medico: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json(feedbacks);
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -19,7 +44,6 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log(body);
     const resposta = await prisma.feedback.create({
       data: body,
     });

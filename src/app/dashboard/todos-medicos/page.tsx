@@ -52,7 +52,6 @@ export default function TodosMedicos() {
     try {
       const res = await fetch(`/api/medico`);
       const data = await res.json();
-      console.log("Dados do médico:", data);
       if (!data || data.error) {
         return;
       }

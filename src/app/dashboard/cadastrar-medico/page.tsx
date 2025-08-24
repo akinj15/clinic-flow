@@ -168,9 +168,9 @@ export default function CadastrarMedico() {
           </p>
         </div>
 
-        <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm">
-          <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
-            <CardTitle>Dados do Profissional</CardTitle>
+        <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm  py-0">
+          <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg ">
+            <CardTitle className="py-4" >Dados do Profissional</CardTitle>
           </CardHeader>
           <CardContent className="p-8">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

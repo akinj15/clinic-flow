@@ -10,6 +10,7 @@ import {
   SlidersHorizontal,
   FileBarChart,
   Building,
+  UserRoundCog,
 } from "lucide-react";
 import {
   Sidebar,
@@ -68,6 +69,12 @@ const allNavigationItems = [
     title: "Relatório de Feedbacks",
     url: "/dashboard/relatorio-feedback",
     icon: FileBarChart,
+    roles: ["admin"], // Apenas administradores
+  },
+  {
+    title: "Usuários",
+    url: "/dashboard/usuarios",
+    icon: UserRoundCog,
     roles: ["admin"], // Apenas administradores
   },
 ];

@@ -57,17 +57,23 @@ export function LoginForm() {
 
   async function onSubmit(formData: LoginFormValues) {}
 
-  const signIn = async () => {
+  const signInGoogle = async () => {
     await authClient.signIn.social({
       provider: "google",
     });
     router.push("/dashboard");
   };
   
+  const signInMicrosoft = async () => {
+    await authClient.signIn.social({
+      provider: "microsoft",
+    });
+    router.push("/dashboard");
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
+        {/* <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -137,7 +143,7 @@ export function LoginForm() {
           ) : (
             "Entrar"
           )}
-        </Button>
+        </Button> */}
 
         <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
@@ -145,18 +151,24 @@ export function LoginForm() {
           </div>
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">
-              Ou continue com
+              Faça login com
             </span>
           </div>
         </div>
-
         <Button
           type="button"
           variant="outline"
           className="w-full bg-blue-600 hover:bg-blue-700   text-white  hover:text-white"
-          onClick={signIn}
+          onClick={signInMicrosoft}
         >
-          {/* <GoogleLogoIcon className="mr-2 h-4 w-4" /> */}
+          Entrar com Microsoft
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full "
+          onClick={signInGoogle}
+        >
           Entrar com Google
         </Button>
       </form>
