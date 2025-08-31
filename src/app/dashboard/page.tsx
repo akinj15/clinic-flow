@@ -138,7 +138,7 @@ export default function BuscarMedico() {
             Buscar Médico
           </h1>
           <p className="text-gray-600">
-            Digite o CPF para iniciar um integração com o profissional
+            Digite o CPF para iniciar um integração com o profissional.
           </p>
         </div>
 
