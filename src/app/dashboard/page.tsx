@@ -138,7 +138,7 @@ export default function BuscarMedico() {
             Buscar Médico
           </h1>
           <p className="text-gray-600">
-            Digite o CPF para iniciar um feedback com o profissional
+            Digite o CPF para iniciar um integração com o profissional
           </p>
         </div>
 
@@ -209,14 +209,14 @@ export default function BuscarMedico() {
           </Alert>
         )}
 
-        {medico && medico.id &&!iniciandoFeedback && !loading && (
+        {medico && medico.id && !iniciandoFeedback && !loading && (
           <DetalhesMedicoCard
             medico={medico}
             onIniciarFeedback={() => setIniciandoFeedback(true)}
             onMedicoAtualizado={handleMedicoAtualizado}
             user={user}
           />
-        )} 
+        )}
 
         {!medico.id && !loading && !error && (
           <div className="text-center py-12">
