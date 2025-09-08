@@ -35,6 +35,7 @@ import {
 import { Prisma } from "@generated/prisma";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { SearchableSelect } from "@/components/SearchableSelect";
 
 const searchSchema = z.object({
   cpf: z
@@ -57,16 +58,6 @@ export default function BuscarMedico() {
   const [user, setUser] = useState<Prisma.UserCreateInput>();
   
   const { data: session, isPending: loadingUser } = authClient.useSession();
-
-
-  // const navigate = useNavigate();
-
-  const form = useForm<SearchFormValues>({
-    resolver: zodResolver(searchSchema),
-    defaultValues: {
-      cpf: "",
-    },
-  });
 
   async function fetchMedicos(cpf: string) {
     setLoading(true);
@@ -91,8 +82,8 @@ export default function BuscarMedico() {
     }
   }
 
-  async function onSubmit(formData: SearchFormValues) {
-    await fetchMedicos(formData.cpf);
+  async function onSubmit(medico: Prisma.MedicoCreateInput) {
+    await fetchMedicos(medico.cpf);
   }
 
   useEffect(() => {
@@ -138,65 +129,24 @@ export default function BuscarMedico() {
             Buscar Médico
           </h1>
           <p className="text-gray-600">
-            Digite o CPF para iniciar um integração com o profissional.
+            Digite o nome, CPF ou CRM para iniciar um integração com o
+            profissional.
           </p>
         </div>
-
         <Card className="mb-8 shadow-xl border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-blue-800">
               <Search className="w-5 h-5" />
-              Busca por CPF
+              Buscar Médico
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <FormField
-                      control={form.control}
-                      name="cpf"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              placeholder="Digite o CPF do médico..."
-                              className="text-lg py-3 border-blue-200 focus:border-blue-400"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Entrando...
-                      </>
-                    ) : (
-                      <>
-                        <Search className="w-4 h-4 mr-2" />
-                        Buscar
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </form>
-            </Form>
+            <SearchableSelect
+              placeholder="Digite para buscar usuários..."
+              onSelect={(value) => onSubmit(value as Prisma.MedicoCreateInput)}
+            />
           </CardContent>
         </Card>
-
         {error && (
           <Alert
             variant="destructive"
@@ -208,7 +158,6 @@ export default function BuscarMedico() {
             </AlertDescription>
           </Alert>
         )}
-
         {medico && medico.id && !iniciandoFeedback && !loading && (
           <DetalhesMedicoCard
             medico={medico}
@@ -217,7 +166,6 @@ export default function BuscarMedico() {
             user={user}
           />
         )}
-
         {!medico.id && !loading && !error && (
           <div className="text-center py-12">
             <Stethoscope className="w-16 h-16 text-gray-300 mx-auto mb-4" />

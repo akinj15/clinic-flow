@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 const { PrismaPlugin } = require("@prisma/nextjs-monorepo-workaround-plugin");
+const path = require("path");
 
 const nextConfig: NextConfig = {
   webpack: (config, { isServer }) => {
@@ -14,6 +15,9 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  turbopack: {
+    root: path.join(__dirname, ".."),
   },
 };
 
