@@ -77,6 +77,12 @@ const allNavigationItems = [
     icon: UserRoundCog,
     roles: ["admin"], // Apenas administradores
   },
+  {
+    title: "Auto. Cadastro",
+    url: "/dashboard/aprovar-cadastro",
+    icon: UserRoundCog,
+    roles: ["admin"], // Apenas administradores
+  },
 ];
 
 export default async function Layout({
@@ -100,8 +106,8 @@ export default async function Layout({
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-50 to-slate-50">
-        <Sidebar className="border-r border-blue-100">
+      <div className="min-h-screen flex w-full max-w-full overflow-hidden bg-gradient-to-br from-blue-50 to-slate-50">
+        <Sidebar className="border-r border-blue-100 w-64 md:w-72 flex-shrink-0">
           <SidebarHeader className="border-b border-blue-100 p-6 bg-white">
             <div className="flex items-center gap-3">
               <div className="w-full h-10 rounded-xl flex items-center justify-center ">
@@ -229,7 +235,7 @@ export default async function Layout({
           </SidebarContent>
         </Sidebar>
 
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col min-w-0">
           <header className="bg-white border-b border-blue-100 px-6 py-4 md:hidden shadow-sm">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="hover:bg-blue-50 p-2 rounded-lg transition-colors duration-200" />

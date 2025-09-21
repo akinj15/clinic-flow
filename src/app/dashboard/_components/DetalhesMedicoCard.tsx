@@ -58,11 +58,40 @@ export default function DetalhesMedicoCard({
   const onSubmit = async (dadosEditados: Prisma.MedicoCreateInput) => {
     setSalvando(true);
     setErro("");
-
     try {
-      setSucesso(true);
       setEditando(false);
-      onMedicoAtualizado(dadosEditados);
+      if (user && user.role === "admin") {
+        const res = await fetch("/api/medico/" + medico.cpf.replace(/\D/g, ""), {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nomeCompleto: dadosEditados.nomeCompleto,
+            email: dadosEditados.email,
+            crm: dadosEditados.crm,
+            telefone: dadosEditados.telefone,
+            especialidade: dadosEditados.especialidade,
+          }),
+        });
+        onMedicoAtualizado(dadosEditados);
+      } else {
+        const res = await fetch("/api/solicitacao", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nomeCompleto: medico.nomeCompleto,
+            cpf: medico.cpf,
+            medicoId: medico.id,
+            userId: user.id,
+            email: medico.email,
+            especialidade: medico.especialidade,
+            crm: medico.crm,
+            telefone: medico.telefone,
+            solicitacao: dadosEditados,
+          }),
+        });
+        if (!res.ok) throw new Error("Erro ao criar unidade");
+      }
+      setSucesso(true);
     } catch (err) {
       console.error("Erro ao salvar alterações", err);
       setErro("Erro ao salvar alterações");
@@ -102,7 +131,9 @@ export default function DetalhesMedicoCard({
           <Alert className="mb-6 border-green-200 bg-green-50">
             <CheckCircle className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-800">
-              Informações atualizadas com sucesso!
+              {user.role === "admin"
+                ? "Informações atualizadas com sucesso!"
+                : "Solicitado alterações com sucesso! Aguarde a aprovação do administrador."}
             </AlertDescription>
           </Alert>
         )}
@@ -260,7 +291,9 @@ export default function DetalhesMedicoCard({
                   ) : (
                     <Save className="w-4 h-4 mr-2" />
                   )}
-                  Salvar
+                  {user.role === "admin"
+                    ? "Salvar Alterações"
+                    : "Solicitar Alterações"}
                 </Button>
               </div>
             ) : (

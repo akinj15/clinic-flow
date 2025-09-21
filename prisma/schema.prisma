@@ -5,9 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
-  binaryTargets = ["native", "rhel-openssl-3.0.x", "linux-musl"]  // first one is for cross-platform, second one for docker, last one for serverless environment. safe to include all
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "linux-musl"] // first one is for cross-platform, second one for docker, last one for serverless environment. safe to include all
 }
 
 datasource db {
@@ -16,7 +16,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String                    @id
   name          String
   email         String
   emailVerified Boolean
@@ -25,6 +25,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  solicitacoes  SolicitacoesAtualizacao[]
 
   role       String?
   banned     Boolean?
@@ -83,17 +84,18 @@ model Verification {
 }
 
 model Medico {
-  id            String     @id @default(uuid())
-  cpf           String     @unique
+  id            String                    @id @default(uuid())
+  cpf           String                    @unique
   crm           String
   nomeCompleto  String
   email         String
   telefone      String
   especialidade String
   setor         String[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @updatedAt
   feedbacks     Feedback[]
+  solicitacoes  SolicitacoesAtualizacao[]
 }
 
 model Feedback {
@@ -131,4 +133,24 @@ model Setor {
   nome      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model SolicitacoesAtualizacao {
+  id            String   @id @default(uuid())
+  medicoId      String
+  medico        Medico   @relation(fields: [medicoId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cpf           String
+  crm           String
+  nomeCompleto  String
+  email         String
+  telefone      String
+  especialidade String
+  setor         String[]
+  solicitacao   Json
+  rejeitada     Boolean @default(false)
+  aprovada      Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
