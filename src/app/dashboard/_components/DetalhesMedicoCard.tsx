@@ -114,7 +114,7 @@ export default function DetalhesMedicoCard({
             <User className="w-6 h-6 py-6" />
             Informações do Profissional
           </div>
-          {user && user.role === "admin" && !editando && (
+          {!editando && (
             <Button
               variant="ghost"
               size="sm"

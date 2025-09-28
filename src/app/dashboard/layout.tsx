@@ -39,7 +39,7 @@ const allNavigationItems = [
     title: "Todos os Médicos",
     url: "/dashboard/todos-medicos",
     icon: Users,
-    roles: ["admin", "user"], // Disponível para todos
+    roles: ["admin"], // Apenas administradores
   },
   {
     title: "Cadastrar Médico",
